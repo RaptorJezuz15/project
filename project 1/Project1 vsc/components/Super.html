@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Employee </title>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <style>
+        .header {
+            text-align: right
+        }
+
+        #myTable th,
+        #myTable td {
+            border: 1px solid black;
+            width: 33%;
+        }
+        .right{
+            flex: auto;
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            height: 200px;
+            border: 3px solid rgb(125, 18, 144);
+
+        }
+        .left{
+            flex: auto;
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            height: 200px;
+            border: 3px solid rgb(125, 18, 144);
+        }
+        
+    </style>
+</head>
+
+<body style="background-color:Azure ;">
+    
+<div class="left">
+    <h2>Employee</h2>
+    <table>
+    <tr>
+        <td class="header"><label for="idInput">Employee ID:</label></td>
+        <td><input type="number" id="idInput" value="1" min="1" max="24"></td>
+    </tr>
+    <tr>
+        <td><button onclick="getEmployee()">Get Employee</button></td>
+    </tr>
+    </table>
+    <h2>Employee Registration</h2>
+
+    <table>
+        <tr>
+            <td class="header"><label for="firstnameInput">First Name:</label></td>
+            <td><input type="text" id="firstnameInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="lastnameInput">Last Name:</label></td>
+            <td><input type="text" id="lastnameInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="emailInput">Email:</label></td>
+            <td><input type="email" id="emailInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="passwordInput">Password:</label></td>
+            <td><input type="password" id="passwordInput"></td>
+        </tr>
+        <tr>
+            <td><button onclick="addUser()" >Registered Employee</button></td>
+        </tr>
+    </table>
+
+    <h2>Employee Update</h2>
+   
+
+    <table>
+        <tr>
+        <td class="header"><label for="idInput" >Employee ID:</label></td>
+        <td class="header"><input type="number" id="idInput" value="1" min="1" max="24" style="float: left;"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="UpdatefirstnameInput">First Name:</label></td>
+            <td><input type="text" id="UpdatefirstnameInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="UpdatelastnameInput">Last Name:</label></td>
+            <td><input type="text" id="UpdatelastnameInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="UpdateemailInput">Email:</label></td>
+            <td><input type="email" id="UpdateemailInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="UpdatepasswordInput">Password:</label></td>
+            <td><input type="password" id="UpdatepasswordInput"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button onclick="updateUser()">Update Employee</button></td>
+        </tr>
+    </table>
+
+    <h2> Delete Employee</h2>
+    <label for="delIdInput">Employee ID:</label>
+    <input type="number" id="delIdInput" min="1" max="24">
+    <button onclick="delEmployee()">Delete Employee</button><br>
+</div>
+   <div class="right">
+    <h2 >Reimbursement Update</h2>
+
+    <table>
+        <tr>
+            <td class="header"><label for="CaseInput" >Case ID:</label></td>
+            <td><input type="number" id="CaseInput" value="1" min="1" max="24"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="amountInput">Amount:</label></td>
+            <td><input type="number" id="amountInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="DateInput">Request Date:</label></td>
+            <td><input type="date" id="DateInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="statusInput">Status:</label></td>
+            <td><label for=" approve by super"> approve by super: </label>
+            <input type="radio" id=" approve by super" value="approve by super" name="status" checked>
+            <label for="denied ">denied: </label>
+            <input type="radio" id="denied " value="denied " name="status"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button onclick="updateReim()">Update Reimbursement</button></td>
+        </tr>
+    </table>
+    <!-- <table>
+        <tr>
+            <td class="header"><label for="supinput">Enter Email:</label></td>
+            <td><input type="text" id="supinput"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button onclick="getAllEmployee()"> List of Request</button></td>
+        </tr>
+    </table> -->
+</div> 
+<div>
+      <table style="border: 1px solid black; border-collapse: collapse;" id="myTable">
+        <thead>
+            <tr>
+                <th>caseId</th>
+                <th>reimbursementAmount</th>
+                <th>requestDate</th>
+                <th>grade</th>
+                <th>employee</th>
+                <th>Supervisor</th>
+                <th>eventDescription</th>
+                <th>status</th>
+            </tr>
+        </thead>
+        <tbody id="myTBody">
+
+        </tbody>
+    </table>
+    <label for="supinput">Enter Email:</label>
+        <input type="text" id="superviseinput">
+    <button onclick="loadsuper()">List of Request</button>
+</div>
+</body>
+<script>
+
+    async function getEmployee() {
+        
+
+        const id = document.getElementById("idInput").value
+        const url = `http://localhost:5000/employee/${id}`
+
+        const httpResponse = await fetch(url)
+        const body = await httpResponse.json()
+
+        console.log(body)
+        
+    }
+    async function updateUser() {
+
+        const id = document.getElementById("idInput").value
+
+        const FnameVal = document.getElementById("UpdatefirstnameInput").value
+        const LnameVal = document.getElementById("UpdatelastnameInput").value
+        const emailVal = document.getElementById("UpdateemailInput").value
+        const passwordVal = document.getElementById("UpdatepasswordInput").value
+        
+        console.log(FnameVal)
+        console.log(LnameVal)
+        console.log(emailVal)
+        console.log(passwordVal)
+
+        const data = {
+            firstName: FnameVal,
+            lastName: LnameVal,
+            email: emailVal,
+            password: passwordVal
+        }
+        
+        const url = `http://localhost:5000/employee/${id}`
+
+        const httpResponse = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        const body = await httpResponse.json();
+
+        console.log(body);
+        if (body) {
+            alert("Employee Successfully Updated!")
+        } else {
+            alert("Employee Failed to be Updated.")
+        }
+    }
+    async function addUser() {
+
+const FnameVal = document.getElementById("firstnameInput").value
+const LnameVal = document.getElementById("lastnameInput").value
+const emailVal = document.getElementById("emailInput").value
+const passwordVal = document.getElementById("passwordInput").value
+
+console.log(FnameVal)
+console.log(LnameVal)
+console.log(emailVal)
+console.log(passwordVal)
+
+const data = {
+    firstName: FnameVal,
+    lastName: LnameVal,
+    email: emailVal,
+    password: passwordVal
+}
+
+const url = "http://localhost:5000/employee"
+
+const httpResponse = await fetch(url, {
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+});
+const body = await httpResponse.json();
+
+console.log(body);
+if (body) {
+    alert("Employee Successfully Registered!")
+} else {
+    alert("Employee Failed to be Registered.")
+}
+}
+    async function delEmployee() {
+
+        const id = document.getElementById("delIdInput").value
+        const url = `http://localhost:5000/employee/${id}`
+
+        const httpResponse = await fetch(url, {
+            method: "DEL",
+        });
+        const body = await httpResponse.json()
+
+    
+
+    }
+    async function updateReim() {
+
+const id = document.getElementById("CaseInput").value
+
+const amountVal = document.getElementById("amountInput").value
+const dateVal = document.getElementById("DateInput").value
+// const statusVal = document.getElementById("statusInput").value
+
+let statusVal = false;
+statusVal = document.querySelector('input[name="status"]:checked').value
+
+console.log(amountVal)
+console.log(dateVal)
+console.log(statusVal)
+
+
+const data = {
+    reimAmount: amountVal,
+    requestDate: dateVal,
+    status: statusVal
+}
+
+const url = `http://localhost:5000//reimburstment/${id}`
+
+const httpResponse = await fetch(url, {
+    method: "PUT",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+});
+const body = await httpResponse.json();
+
+console.log(body);
+if (body) {
+    alert("Pass to Department head(DH@gmail.com) ")
+} else {
+    alert("]Failed to be update reimburstment.")
+}
+}
+//     async function getAllEmployee() {
+
+// const id = document.getElementById("supinput").value
+// const url = `http://localhost:5000//reimburstment/1/${id}`
+
+// const httpResponse = await fetch(url)
+// const body = await httpResponse.json()
+
+// console.log(body)
+//     }
+
+    async function loadsuper() {
+    const id = document.getElementById("superviseinput").value
+    const url = `http://localhost:5000//reimburstment/1/${id}`
+
+    const httpResponse = await fetch(url)
+    const body = await httpResponse.json()
+
+    
+    console.log(body)
+//   let supervise = [
+//   {caseId: body.caseId, dueDate: body.dueDate, employee: body.employee, eventDescription: body.eventDescription, 
+//     grade: body.grade, reimbursementAmount: body.reimAmount, status: body.status, supervisor: body.supervisor}
+//  ]
+    
+ let tableElement = document.getElementById("myTBody")
+        tableElement.innerHTML = "";
+
+
+        body.forEach(supervise => {
+    //Create a new tr and put it into my tbody ("table")
+    let superviseRow = document.createElement("tr")
+    tableElement.appendChild(superviseRow)
+
+    
+   
+        let Data = document.createElement("td")
+        Data.innerHTML = supervise.caseId
+        superviseRow.appendChild(Data);
+        
+        let Data5 = document.createElement("td")
+        Data5.innerHTML = supervise.reimbursementAmount
+        superviseRow.appendChild(Data5);
+
+        let Data2 = document.createElement("td")
+        Data2.innerHTML = supervise.requestDate
+        superviseRow.appendChild(Data2);
+        
+        let Data7 = document.createElement("td")
+        Data7.innerHTML = supervise.grade
+        superviseRow.appendChild(Data7);
+
+        let Data3 = document.createElement("td")
+        Data3.innerHTML = supervise.employee
+        superviseRow.appendChild(Data3);
+
+        let Data8 = document.createElement("td")
+        Data8.innerHTML = supervise.supervisor
+        superviseRow.appendChild(Data8);
+
+        let Data4 = document.createElement("td")
+        Data4.innerHTML = supervise.eventDescription
+        superviseRow.appendChild(Data4);
+
+        let Data6 = document.createElement("td")
+        Data6.innerHTML = supervise.status
+        superviseRow.appendChild(Data6);
+
+        
+        
+
+}
+)}
+
+
+
+</script>
+
+</html>

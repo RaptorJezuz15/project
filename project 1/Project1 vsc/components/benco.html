@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Benco@gmail.com</title>
+</head>
+<body>
+    <h2 >Reimbursement Update</h2>
+
+    <table>
+        <tr>
+            <td class="header"><label for="CaseInput" >Case ID:</label></td>
+            <td><input type="number" id="CaseInput" value="1" min="1" max="24"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="amountInput">Amount:</label></td>
+            <td><input type="number" id="amountInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="DateInput">Request Date:</label></td>
+            <td><input type="date" id="DateInput"></td>
+        </tr>
+        <tr>
+            <td class="header"><label for="statusInput">Status:</label></td>
+                <td><label for=" approve by super"> approve by super: </label>
+                <input type="radio" id=" approve by super" value="Fully approve" name="status" checked>
+                <label for="denied ">denied: </label>
+                <input type="radio" id="denied " value="denied " name="status"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button onclick="updateReim()">Update Reimbursement</button></td>
+        </tr>
+    </table>
+    <div>
+        <table style="border: 1px solid black; border-collapse: collapse;" id="myTable">
+          <thead>
+              <tr>
+                  <th>caseId</th>
+                  <th>reimbursementAmount</th>
+                  <th>requestDate</th>
+                  <th>grade</th>
+                  <th>employee</th>
+                  <th>Supervisor</th>
+                  <th>eventDescription</th>
+                  <th>status</th>
+              </tr>
+          </thead>
+          <tbody id="myTBody">
+  
+          </tbody>
+      </table>
+      <button onclick="loadsuper()">Populate Employees</button>
+  </div>
+</body>
+<script>
+      async function updateReim() {
+
+const id = document.getElementById("CaseInput").value
+
+const amountVal = document.getElementById("amountInput").value
+const dateVal = document.getElementById("DateInput").value
+let statusVal = false;
+statusVal = document.querySelector('input[name="status"]:checked').value
+
+
+console.log(amountVal)
+console.log(dateVal)
+console.log(statusVal)
+
+
+const data = {
+    reimAmount: amountVal,
+    requestDate: dateVal,
+    status: statusVal
+}
+
+const url = `http://localhost:5000//reimburstment/${id}`
+
+const httpResponse = await fetch(url, {
+    method: "PUT",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+});
+const body = await httpResponse.json();
+
+console.log(body);
+if (body) {
+    alert("This request is fully approve ")
+} else {
+    alert("Failed to be update reimburstment.")
+}
+}
+async function loadsuper() {
+    // const id = document.getElementById("superviseinput").value
+    const url = `http://localhost:5000//reimburstment`
+
+    const httpResponse = await fetch(url)
+    const body = await httpResponse.json()
+
+    
+    console.log(body)
+let tableElement = document.getElementById("myTBody")
+        tableElement.innerHTML = "";
+
+
+        body.forEach(supervise => {
+    //Create a new tr and put it into my tbody ("table")
+    let superviseRow = document.createElement("tr")
+    tableElement.appendChild(superviseRow)
+
+    
+   
+        let Data = document.createElement("td")
+        Data.innerHTML = supervise.caseId
+        superviseRow.appendChild(Data);
+        
+        let Data5 = document.createElement("td")
+        Data5.innerHTML = supervise.reimbursementAmount
+        superviseRow.appendChild(Data5);
+
+        let Data2 = document.createElement("td")
+        Data2.innerHTML = supervise.requestDate
+        superviseRow.appendChild(Data2);
+        
+        let Data7 = document.createElement("td")
+        Data7.innerHTML = supervise.grade
+        superviseRow.appendChild(Data7);
+
+        let Data3 = document.createElement("td")
+        Data3.innerHTML = supervise.employee
+        superviseRow.appendChild(Data3);
+
+        let Data8 = document.createElement("td")
+        Data8.innerHTML = supervise.supervisor
+        superviseRow.appendChild(Data8);
+
+        let Data4 = document.createElement("td")
+        Data4.innerHTML = supervise.eventDescription
+        superviseRow.appendChild(Data4);
+
+        let Data6 = document.createElement("td")
+        Data6.innerHTML = supervise.status
+        superviseRow.appendChild(Data6);
+
+        
+        
+        }
+)}
+
+</script>
+</html>

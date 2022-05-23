@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+      .container{
+            flex: auto;
+            display: flex;
+            justify-content: center;
+            
+          }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" id="email" required>
+
+      <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" id="password" required>
+
+      <button onclick="getCredentials()">Login</button><br>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+<script>
+  async function getCredentials(){
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const url = `http://localhost:5000/employees`;
+
+    const res = await fetch(url)
+    const body = await res.json()
+
+    console.log(body);
+
+    let currentEmp = body.find(emp => emp.email === email);
+    console.log(currentEmp);
+
+    if (email === "HM89@gmail.com" || email === "JJ8069@gmail.com" ) {
+      window.location.href="C:/Users/Keith/Desktop/Revature/Project1/components/Super.html"
+    
+    }
+    else if (email === "DH@gmail.com"){
+      window.location.href="C:/Users/Keith/Desktop/Revature/Project1/components/head.html"
+    }
+    else if (email === "Benco@gmail.com"){
+      window.location.href="C:/Users/Keith/Desktop/Revature/Project1/components/benco.html"
+    }
+    else if (emp.email === email){
+      window.location.href="C:/Users/Keith/Desktop/Revature/Project1/components/Employee.html"
+    }
+
+    // if (currentEmp.password === password) {
+      
+    // }
+
+  }
+</script>
+</html>
