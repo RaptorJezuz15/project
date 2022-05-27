@@ -31,16 +31,7 @@ To-do list:
 > Be sure to include BOTH Windows and Unix command  
 > Be sure to mention if the commands only work on a specific platform (eg. AWS, GCP)
 
-- All the 
-- `INSERT INTO public.employee (firstname,lastname,email,"password") VALUES
-	 ('John','Johnson','JJ8069@gmail.com','pass123'),
-	 ('Susan','Smith','DH@gmail.com','pass123'),
-	 ('Micheal','Campbell','Benco@gmail.com','pass123'),
-	 ('Joe','Bom','joebom12@gmail.com','pass123'),
-	 ('Harrison','Morgan','HM89@gmail.com','pass123'),
-	 ('Your','Mama','mamamam@gmail.com','dosd'),
-	 ('Pip','Hog','flyinghog','pass123'),
-	 ('Matty','James','mattyfly','mat1');` required to get started
+- All the required code to get started is in tsmrsql.txt file for the databased
 - Images of what it should look like
 
 ## Usage
