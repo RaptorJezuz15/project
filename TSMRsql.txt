@@ -1,0 +1,39 @@
+CREATE TABLE "employee" (
+  "employeeid" SERIAL PRIMARY KEY,
+  "firstname" varchar,
+  "lastname" varchar,
+  "email" varchar,
+  "password" varchar,
+);
+CREATE TABLE "reimburstment" (
+  "caseid" SERIAL PRIMARY KEY,
+  "reimamount" int,
+  "grade" varchar,
+  "employee" int,
+  "supervisor" varchar,
+  "event_des" varchar,
+  "requestdate" varchar,
+  "status" varchar,
+);
+
+
+
+
+ALTER TABLE "reimburstment" ADD FOREIGN KEY ("employee") REFERENCES  "employee" ("employeeid");
+
+INSERT INTO public.employee (firstname,lastname,email,"password") VALUES
+	 ('John','Johnson','JJ8069@gmail.com','pass123'),
+	 ('Susan','Smith','DH@gmail.com','pass123'),
+	 ('Micheal','Campbell','Benco@gmail.com','pass123'),
+	 ('Joe','Bom','joebom12@gmail.com','pass123'),
+	 ('Harrison','Morgan','HM89@gmail.com','pass123'),
+	 ('Your','Mama','mamamam@gmail.com','dosd'),
+	 ('Pip','Hog','flyinghog','pass123'),
+	 ('Matty','James','mattyfly','mat1');
+INSERT INTO public.reimburstment (reimamount,grade,supervisor,event_des,requestdate,status) VALUES
+	 (1000,'A','HM89@gmail.com','Seminars ','1652459466.9181514','pending'),
+	 (1000,'B','{supervisor}','Graduated',NULL,NULL),
+	 (1000,'B','{supervisor}','Graduated',NULL,NULL),
+	 (1000,'B','{supervisor}','Graduated',NULL,NULL),
+	 (300,'B','JJ8069@gmail.com','Certification ','1652459851.497259','approve by super'),
+	 (300,'B','HM89@gmail.com','University Courses ','1652279651','pending');
